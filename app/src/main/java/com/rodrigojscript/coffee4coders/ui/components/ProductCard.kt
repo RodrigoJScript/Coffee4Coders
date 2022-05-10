@@ -16,10 +16,52 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rodrigojscript.coffee4coders.R
+import com.rodrigojscript.coffee4coders.ui.theme.Coffee4CodersTheme
 import com.rodrigojscript.coffee4coders.ui.theme.PlatziBlue
+import com.rodrigojscript.coffee4coders.ui.theme.PlatziGreen
+
+enum class CountryISO(val iso: String) {
+    COL("COL"),
+    BRA("BRA"),
+    CRI("CRI"),
+    NIC("NIC");
+
+    fun getBackgroundImage(): Int {
+        when (this) {
+            COL -> return R.drawable.co
+            BRA -> return R.drawable.br
+            CRI -> return R.drawable.ri
+            NIC -> return R.drawable.ni
+        }
+    }
+
+    fun getCountryFlag(): Int {
+        when (this) {
+            COL -> return R.drawable.flagco
+            BRA -> return R.drawable.flagbr
+            CRI -> return R.drawable.flagri
+            NIC -> return R.drawable.flagni
+        }
+    }
+
+    fun getSurfaceColor(): Color {
+        when (this) {
+            COL, NIC -> return PlatziBlue
+            BRA, CRI -> return PlatziGreen
+
+
+        }
+    }
+}
 
 @Composable
-fun ProductCard() {
+fun ProductCard(
+    name: String,
+    summary: String,
+    price: Double,
+    currency: String,
+    country: CountryISO,
+) {
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)
@@ -29,29 +71,40 @@ fun ProductCard() {
         shape = MaterialTheme.shapes.small
     ) {
         Image(
-            painter = painterResource(id = R.drawable.co),
-            contentDescription = null
+            painter = painterResource(id = country.getBackgroundImage()),
+            contentDescription = null,
         )
-        Surface(modifier = Modifier.fillMaxWidth(), color = PlatziBlue.copy(alpha = 0.2f)) {
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = country.getSurfaceColor().copy(alpha = 0.2f)
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(text = "Cafe de Colombia")
-                Text(text = "Un cafe de origen de las montañas")
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.h4
+                )
+                Text(
+                    text = summary,
+                    style = MaterialTheme.typography.body1
+                )
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Bottom
                 ) {
                     Row {
                         Image(
-                            painter = painterResource(id = R.drawable.flagco),
-                            contentDescription = null
+                            painter = painterResource(id = country.getCountryFlag()),
+                            contentDescription = null,
+                            modifier = Modifier.size(32.dp, 32.dp)
                         )
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "$35.USD",
-                            textAlign = TextAlign.End
+                            text = "$ $price $currency",
+                            textAlign = TextAlign.End,
+                            style = MaterialTheme.typography.h4
                         )
                     }
 
@@ -64,5 +117,7 @@ fun ProductCard() {
 @Preview(showBackground = true)
 @Composable
 fun ProductCardPreview() {
-    ProductCard()
+    Coffee4CodersTheme() {
+        ProductCard("Cafe de Colombia", "Un cafe de las montañas", 35.0, "USD", CountryISO.BRA)
+    }
 }
