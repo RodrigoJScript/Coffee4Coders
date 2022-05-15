@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.rodrigojscript.coffee4coders.ui.components.CountryISO
 import com.rodrigojscript.coffee4coders.ui.screens.DetailScreen
 import com.rodrigojscript.coffee4coders.ui.screens.FeedScreen
+import com.rodrigojscript.coffee4coders.ui.theme.BaseAppTheme
 import com.rodrigojscript.coffee4coders.ui.theme.Coffee4CodersTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,19 +31,18 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun NavigationHost() {
     val navController = rememberNavController()
-    Coffee4CodersTheme() {
-        Surface(color = MaterialTheme.colors.background) {
-            NavHost(navController = navController, startDestination = "feed") {
-                composable(route = "feed") {
-                    FeedScreen(navController)
-                }
-                composable(route = "detail/{countryIso}") { backStackEntry ->
-                    val countryIsoString =
-                        backStackEntry.arguments?.getString("countryIso") ?: "COL"
-                    val countryIso = CountryISO.valueOf(countryIsoString)
-                    DetailScreen(navController, countryIso)
-                }
+    BaseAppTheme {
+        NavHost(navController = navController, startDestination = "feed") {
+            composable(route = "feed") {
+                FeedScreen(navController)
+            }
+            composable(route = "detail/{countryIso}") { backStackEntry ->
+                val countryIsoString =
+                    backStackEntry.arguments?.getString("countryIso") ?: "COL"
+                val countryIso = CountryISO.valueOf(countryIsoString)
+                DetailScreen(navController, countryIso)
             }
         }
     }
 }
+
