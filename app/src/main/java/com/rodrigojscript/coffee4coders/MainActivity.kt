@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.rodrigojscript.coffee4coders.providers.MockDataProvider
 import com.rodrigojscript.coffee4coders.ui.components.CountryISO
 import com.rodrigojscript.coffee4coders.ui.screens.CheckoutScreen
 import com.rodrigojscript.coffee4coders.ui.screens.DetailScreen
@@ -37,17 +38,19 @@ fun NavigationHost() {
             composable(route = "feed") {
                 FeedScreen(navController)
             }
-            composable(route = "detail/{countryIso}") { backStackEntry ->
-                val countryIsoString =
-                    backStackEntry.arguments?.getString("countryIso") ?: "COL"
-                val countryIso = CountryISO.valueOf(countryIsoString)
-                DetailScreen(navController, countryIso)
+            composable(route = "detail/{productId}") { backStackEntry ->
+                val productIdString =
+                    backStackEntry.arguments?.getString("productId") ?: "0"
+                val productId = productIdString.toInt()
+                val product = MockDataProvider.getProduct(productId)
+                DetailScreen(navController, product!!)
             }
-            composable(route = "checkout/{countryIso}") { backStackEntry ->
-                val countryIsoString =
-                    backStackEntry.arguments?.getString("countryIso") ?: "COL"
-                val countryIso = CountryISO.valueOf(countryIsoString)
-                CheckoutScreen(navController, countryIso)
+            composable(route = "checkout/{productId}") { backStackEntry ->
+                val productIdString =
+                    backStackEntry.arguments?.getString("productId") ?: "0"
+                val productId = productIdString.toInt()
+                val product = MockDataProvider.getProduct(productId)
+                CheckoutScreen(navController, product!!)
             }
         }
     }

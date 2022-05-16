@@ -12,14 +12,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.rodrigojscript.coffee4coders.providers.MockDataProvider
 import com.rodrigojscript.coffee4coders.ui.components.*
 import com.rodrigojscript.coffee4coders.ui.theme.Coffee4CodersTheme
 
 @Composable
 fun FeedScreen(navController: NavController) {
-    val list = listOf<CountryISO>(
-        CountryISO.COL, CountryISO.CRI, CountryISO.BRA, CountryISO.NIC
-    )
+    val list = MockDataProvider.listOfProducts()
 
     Scaffold(
         topBar = {
@@ -35,15 +34,9 @@ fun FeedScreen(navController: NavController) {
                                 BodyText(text = "Jolly roger, arrr. Buxums sunt abactors de regius animalis.")
                             }
                         }
-                        items(list) { country ->
-                            ProductCard(
-                                name = "Cafe de Colombia",
-                                summary = "Cafe de las montañas",
-                                price = 35.00,
-                                currency = "USD",
-                                country = country
-                            ) {
-                                navController.navigate(route = "detail/${country.iso}") {
+                        items(list) { product ->
+                            ProductCard(product = product) {
+                                navController.navigate(route = "detail/${product.id}") {
                                     launchSingleTop = true
                                 }
                             }
