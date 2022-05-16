@@ -1,15 +1,26 @@
 package com.rodrigojscript.coffee4coders.ui.screens
 
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenu
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import com.rodrigojscript.coffee4coders.ui.components.CustomDropdownTextField
-import com.rodrigojscript.coffee4coders.ui.components.CustomTextField
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.rodrigojscript.coffee4coders.ui.components.*
 import com.rodrigojscript.coffee4coders.ui.theme.BaseAppTheme
 
 @Composable
-fun CheckoutScreen() {
-    var city by remember { mutableStateOf("") }
+fun CheckoutScreen(navController: NavController, country: CountryISO) {
     val cities = listOf<String>(
         "All",
         "children",
@@ -23,16 +34,79 @@ fun CheckoutScreen() {
         "chile",
         "powder"
     )
+    var city by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var adress by remember { mutableStateOf("") }
 
-    CustomDropdownTextField(suggestions = cities, value = city, placeholder = "Ciudad") {
-        city = it
-    }
+    Scaffold(topBar = {
+        CustomAppBar(navigationIcon = Icons.Filled.ArrowBack) {
+            navController.navigate("detail/${country.iso}")
+        }
+    }, content = {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            ProductCard(
+                name = "Cafe de colombia",
+                summary = "Cafe Nuevo",
+                price = 35.0,
+                currency = "USD",
+                country = country
+            ) {}
+
+            Column(modifier = Modifier.padding(16.dp)) {
+                CustomTextField(value = name, placeholder = "Nombre") { name = it }
+                CustomTextField(value = phone, placeholder = "Telefono") { phone = it }
+                CustomTextField(value = email, placeholder = "Email") { email = it }
+                CustomTextField(value = adress, placeholder = "Direccion") { adress = it }
+                CustomDropdownTextField(
+                    suggestions = cities,
+                    value = city,
+                    placeholder = "Ciudad"
+                ) {
+                    city = it
+                }
+                Column {
+                    Row {
+                        Text("SubTotal", style = MaterialTheme.typography.caption)
+                        Text(
+                            "$ 35.0 USD",
+                            style = MaterialTheme.typography.caption,
+                            textAlign = TextAlign.End,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                    Row {
+                        Text("Envio", style = MaterialTheme.typography.caption)
+                        Text(
+                            "$ 15.0 USD",
+                            style = MaterialTheme.typography.caption,
+                            textAlign = TextAlign.End,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text(
+                        text = "$ 45.0 USD",
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Start
+                    )
+                    CustomButton(label = "Finalizar pedido") {
+
+                    }
+                }
+            }
+        }
+    })
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CheckoutScreenPreview() {
+    val navController = rememberNavController()
+
     BaseAppTheme {
-        CheckoutScreen()
+        CheckoutScreen(navController, country = CountryISO.COL)
     }
 }
