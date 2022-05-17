@@ -74,7 +74,7 @@ fun ProductCard(
     ) {
         Image(
             painter = painterResource(id = country.getBackgroundImage()),
-            contentDescription = null,
+            contentDescription = null, modifier = Modifier.fillMaxSize()
         )
         Surface(
             modifier = Modifier.fillMaxWidth(),

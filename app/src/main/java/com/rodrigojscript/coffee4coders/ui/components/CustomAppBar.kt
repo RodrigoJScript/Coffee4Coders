@@ -15,7 +15,7 @@ fun CustomAppBar(
     navigationIcon: ImageVector? = null,
     navigationAction: NavigationAction? = null
 ) {
-    val titleText = title ?: ""
+    val titleText = title ?: "Coffe4Coders"
     if (navigationIcon != null && navigationAction != null) {
         TopAppBar(
             title = { Text(text = titleText) },
@@ -40,6 +40,6 @@ fun CustomAppBar(
 @Composable
 fun CustomAppBarPreview() {
     Coffee4CodersTheme {
-        CustomAppBar(title = "CoffeeFourCoder")
+        CustomAppBar(title = "Coffee4Coder")
     }
 }
